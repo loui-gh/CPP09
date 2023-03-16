@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
 
     // Insert the date and exchange rate into the map
     csvMap.insert(std::make_pair(date, exchange_rate));
-  
+    }
     //0Open the input file and process each line
     std::ifstream input_file(argv[1]);
     std::string input_line;
@@ -46,13 +46,17 @@ int main(int argc, char* argv[]) {
         date_str.erase(0, date_str.find_first_not_of(" \n\r\t"));
         date_str.erase(date_str.find_last_not_of(" \n\r\t") + 1);
         ss >> value;
-
         // Lookup the exchange rate for the date and calculate the corresponding value
          // Find the exchange rate for the lookup date in the map
         it = csvMap.find(date_str);
-        if (it == csvMap.end()) {
-            std::cerr << "Error: bad input => " << date_str << std::endl;
-            continue;
+        if (it == csvMap.end()) {//then it hasn't found the exact data string
+            it = csvMap.upper_bound(date_str);
+            if (it == csvMap.begin()) {
+                std::cerr << "Error: bad input => " << date_str << std::endl;
+                continue;
+            } else {
+                --it;
+            }
         }
         if (value < 0) {
             std::cout << "Error: not a positive number.\n";
