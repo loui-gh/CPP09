@@ -7,9 +7,6 @@
 #include <string>
 #include <map>
 
-
-typedef std::map<std::string, double> my_map;
-
 class BitcoinExchange {
     public:
         BitcoinExchange(char const *input_text_file);
