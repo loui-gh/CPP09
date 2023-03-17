@@ -8,6 +8,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <iomanip>
+#include <limits>
 
 
 class   PmergeMe {
@@ -17,7 +18,8 @@ class   PmergeMe {
         std::list<int>      _listSorted;
         std::vector<int>    _vecOG;
         std::vector<int>    _vecSorted;
-        float               _elapsed_seconds;
+        float               _timerList;
+        float               _timerVector;
 
     public:
         PmergeMe(int argc, char *sequence[]);
@@ -27,12 +29,18 @@ class   PmergeMe {
 
         void                PrintAll();
 
-        void                CreateList(int argc, char *sequence[]);
-        void                MergeSortList( std::list<int> &lst );
+        void                    CreateList(int argc, char *sequence[]);
+        void                    MergeSortList( std::list<int> &lst );
+        // const std::list<int>&   getOGList();
+        // const std::list<int>&   getSortedList();
+
         
-        // void                CreateVector(int argc, char *sequence[]);
-        // void                MergeSortVector();
+        void                CreateVector(int argc, char *sequence[]);
+        void                MergeSortVector(std::vector<int> &vec);
+
 
 };
+
+// std::ostream & operator<<(std::ostream & os,  const PmergeMe& p);
 
 #endif

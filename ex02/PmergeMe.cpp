@@ -4,9 +4,8 @@
 PmergeMe::PmergeMe(int argc, char *sequence[]) {
 
     CreateList(argc, sequence);
-
-   // MergeSortList(getList());
-   // PrintAll();
+    CreateVector(argc, sequence);
+    PrintAll();
 }
 
 /*copy constructor*/
@@ -28,17 +27,17 @@ PmergeMe::~PmergeMe( void ) {}
 
 void    PmergeMe::CreateList(int argc, char *sequence[]) {
 
-    //check for non-digits:
+    //create the list
     for (int i = 1; i < argc; ++i) {
         int value = std::atoi(sequence[i]);
         _lstOG.push_back(value);
     }
+    //start the timer; merge; stop the clock;
     clock_t start = clock();
     _listSorted = _lstOG;
     MergeSortList(_listSorted);
     clock_t end = clock();
-    _elapsed_seconds = float(end - start) / CLOCKS_PER_SEC;
-    PrintAll();
+    _timerList = float(end - start) / CLOCKS_PER_SEC;
 
 
 }
@@ -72,8 +71,57 @@ void    PmergeMe::PrintAll( ) {
         std::cout << std::endl;
 
     std::cout << "Time to process a range of " << _listSorted.size() << " elements with std::list<>: ";
-    std::cout << std::fixed << std::setprecision(5) << _elapsed_seconds * 1000000 << " us" << std::endl;
+    std::cout << std::fixed << std::setprecision(5) << _timerList * 1000000 << " us" << std::endl;
+
+    std::cout << "Time to process a range of " << _vecOG.size() << " elements with std::vector<>: ";
+    std::cout << std::fixed << std::setprecision(5) << _timerVector* 1000000 << " us" << std::endl;
 }
+
+// std::list<int>&     PmergeMe::getOGList() {
+
+//     return _lstOG;
+// }
+
+// std::list<int>&     PmergeMe::getSortedList() {
+
+//    return _listSorted;
+// }
+
+// std::ostream& operator<<(std::ostream& os, const PmergeMe& p) {
+//     os << "Before: ";
+//     int counter = 0;
+//     std::list<int>::const_iterator it = p.getOGList().begin();
+//     while (counter != 5 && it != p.getSortedList().end()) {
+//         os << *it << " ";
+//         ++it;
+//         ++counter;
+//     }
+//     if (it != p.getOGList().end())
+//         os << " [...]\n";
+//     else
+//         os << std::endl;
+
+//     os << "After: ";
+//     int scounter = 0;
+//     std::list<int>::const_iterator sit = p.getSortedList().begin();
+//     while (scounter != 5 && sit != p.getSorted().end()) {
+//         os << *sit << " ";
+//         ++sit;
+//         ++scounter;
+//     }
+//     if (sit != p.getSorted().end())
+//         os << " [...]\n";
+//     else
+//         os << std::endl;
+
+//     os << "Time to process a range of " << p.getSorted().size() << " elements with std::list<>: ";
+//     os << std::fixed << std::setprecision(5) << p._timerList * 1000000 << " us" << std::endl;
+
+//     os << "Time to process a range of " << p.getOGList().size() << " elements with std::vector<>: ";
+//     os << std::fixed << std::setprecision(5) << p._timerVector * 1000000 << " us" << std::endl;
+
+//     return os;
+// }
 
 
 void PmergeMe::MergeSortList(std::list<int> &lst ) {
@@ -106,20 +154,37 @@ void PmergeMe::MergeSortList(std::list<int> &lst ) {
     lst.splice(lst.end(), right, it_right, right.end());
 }
 
-// void                PmergeMe::CreateVector(int argc, char *sequence[]) {
+void    PmergeMe::CreateVector(int argc, char *sequence[]) {
 
-//     std::vector<int> sequence;
-//     for (int i = 1; i < argc; ++i) {
-//         int number = std::atoi(sequence[i]);
-//         if (number < 1) {
-//             throw std::runtime_error << "Error: Only positive integers are allowed." << std::endl;
-//         }
-//         sequence.push_back(number);
-//     }
+    //create the vector;
+    for (int i = 1; i < argc; ++i) {
+        int number = std::atoi(sequence[i]);
+        _vecOG.push_back(number);
+    }
+    //start the timer; merge; stop the clock;
+     clock_t start = clock();
+    _vecSorted = _vecOG;
+    MergeSortVector(_vecSorted);
+    clock_t end = clock();
+    _timerVector = float(end - start) / CLOCKS_PER_SEC;
 
-//     std::vector<int> original_sequence(sequence);
-// }
-// void                PmergeMe::MergeSortVector() {
+}
 
+void                PmergeMe::MergeSortVector( std::vector<int> &vec ) {
 
-// }
+     for (size_t i = 1; i < vec.size(); ++i) {
+        if (vec[i] < vec[i - 1]) {
+            // Insert the out-of-order element in the sorted sequence
+            vec.push_back(vec[i]);
+            size_t j = vec.size() - 1;
+
+            while (j > 0 && vec[j - 1] > vec[j]) {
+                std::swap(vec[j], vec[j - 1]);
+                j--;
+            }
+
+            // Remove the original out-of-order element
+            vec.erase(vec.begin() + i);
+        }
+    }
+}
