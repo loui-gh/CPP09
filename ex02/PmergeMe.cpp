@@ -30,22 +30,12 @@ void    PmergeMe::CreateList(int argc, char *sequence[]) {
 
     //check for non-digits:
     for (int i = 1; i < argc; ++i) {
-        std::string str = sequence[i];
-        for (std::string::iterator it = str.begin(); it != str.end(); ++it) {
-        if (!isdigit(*it)) {
-            throw std::runtime_error("Error\n");
-        }
-    }
-    }
-    for (int i = 1; i < argc; ++i) {
         int value = std::atoi(sequence[i]);
-        if (value <= 0) {
-            throw std::runtime_error("Error\n");
-        }
-        _lst.push_back(value);
+        _lstOG.push_back(value);
     }
     clock_t start = clock();
-    MergeSortList(_lst);
+    _listSorted = _lstOG;
+    MergeSortList(_listSorted);
     clock_t end = clock();
     _elapsed_seconds = float(end - start) / CLOCKS_PER_SEC;
     PrintAll();
@@ -57,31 +47,31 @@ void    PmergeMe::PrintAll( ) {
 
     std::cout << "Before: ";
     int counter = 0;
-    std::list<int>::iterator it = _lst.begin();
-    while (counter != 5 && it != _lst.end()) {
+    std::list<int>::iterator it = _lstOG.begin();
+    while (counter != 5 && it != _lstOG.end()) {
         std::cout << *it << " ";
         ++it; 
         ++counter;
     }
-    if (it != _lst.end())
+    if (it != _lstOG.end())
         std::cout << " [...]\n";
     else
         std::cout << std::endl;
 
     std::cout << "After: ";
     int scounter = 0;
-    std::list<int>::iterator sit = _lst.begin();
-    while (scounter != 5 && sit != _lst.end()) {
+    std::list<int>::iterator sit = _listSorted.begin();
+    while (scounter != 5 && sit != _listSorted.end()) {
         std::cout << *sit << " ";
         ++sit; 
         ++scounter;
     }
-    if (sit != _lst.end())
+    if (sit != _listSorted.end())
         std::cout << " [...]\n";
     else
         std::cout << std::endl;
 
-    std::cout << "Time to process a range of " << _lst.size() << " elements with std::list<>: ";
+    std::cout << "Time to process a range of " << _listSorted.size() << " elements with std::list<>: ";
     std::cout << std::fixed << std::setprecision(5) << _elapsed_seconds * 1000000 << " us" << std::endl;
 }
 
@@ -116,5 +106,20 @@ void PmergeMe::MergeSortList(std::list<int> &lst ) {
     lst.splice(lst.end(), right, it_right, right.end());
 }
 
-// void                CreateVector();
-// void                MergeSortVector();
+// void                PmergeMe::CreateVector(int argc, char *sequence[]) {
+
+//     std::vector<int> sequence;
+//     for (int i = 1; i < argc; ++i) {
+//         int number = std::atoi(sequence[i]);
+//         if (number < 1) {
+//             throw std::runtime_error << "Error: Only positive integers are allowed." << std::endl;
+//         }
+//         sequence.push_back(number);
+//     }
+
+//     std::vector<int> original_sequence(sequence);
+// }
+// void                PmergeMe::MergeSortVector() {
+
+
+// }

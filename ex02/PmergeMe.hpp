@@ -13,8 +13,10 @@
 class   PmergeMe {
 
     private:
-        std::list<int>      _lst;
-       // std::vector<int>    _vec;
+        std::list<int>      _lstOG;
+        std::list<int>      _listSorted;
+        std::vector<int>    _vecOG;
+        std::vector<int>    _vecSorted;
         float               _elapsed_seconds;
 
     public:
@@ -28,7 +30,7 @@ class   PmergeMe {
         void                CreateList(int argc, char *sequence[]);
         void                MergeSortList( std::list<int> &lst );
         
-        // void                CreateVector();
+        // void                CreateVector(int argc, char *sequence[]);
         // void                MergeSortVector();
 
 };
